@@ -288,6 +288,15 @@ firstdata_e4:
   login:
   password:
 
+firstdata_ipg:
+  user_id: WS[STORE_ID]._.1
+  password: PASSWORD
+  pem: |
+    PASTE YOUR USER.KEY FILE HERE
+  pem_cert: |
+    PASTE YOUR USER.PEM FILE HERE
+  pem_password: PEM_PASSWORD
+
 flo2cash:
   username: SOMECREDENTIAL
   password: ANOTHERCREDENTIAL

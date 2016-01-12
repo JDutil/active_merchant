@@ -62,6 +62,11 @@ module ActiveMerchant #:nodoc:
       connection.proxy_address = proxy_address
       connection.proxy_port    = proxy_port
 
+      # TODO Remove hack when we get a better pem.
+      # This is required because the pem file we have from ipg is outdated, and
+      # does not include both the cert and key within the same pem file.
+      connection.pem_cert = @options[:pem_cert] if @options
+
       connection.request(method, data, headers)
     end
 

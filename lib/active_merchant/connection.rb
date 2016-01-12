@@ -33,6 +33,11 @@ module ActiveMerchant
     attr_accessor :proxy_address
     attr_accessor :proxy_port
 
+    # TODO Remove hack when we get a better pem.
+    # This is required because the pem file we have from ipg is outdated, and
+    # does not include both the cert and key within the same pem file.
+    attr_accessor :pem_cert
+
     def initialize(endpoint)
       @endpoint     = endpoint.is_a?(URI) ? endpoint : URI.parse(endpoint)
       @open_timeout = OPEN_TIMEOUT
@@ -124,13 +129,19 @@ module ActiveMerchant
       else
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
-
     end
 
     def configure_cert(http)
       return if pem.blank?
 
-      http.cert = OpenSSL::X509::Certificate.new(pem)
+      # TODO Remove hack when we get a better pem.
+      # This is required because the pem file we have from ipg is outdated, and
+      # does not include both the cert and key within the same pem file.
+      if pem_cert
+        http.cert = OpenSSL::X509::Certificate.new(pem_cert)
+      else
+        http.cert = OpenSSL::X509::Certificate.new(pem)
+      end
 
       if pem_password
         http.key = OpenSSL::PKey::RSA.new(pem, pem_password)
